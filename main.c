@@ -119,7 +119,7 @@ int main(int argc, char **argv)
 			x = (x + 1) % MAX_CELLS;
 			break;
 		case '<':
-			x = (x - 1) % MAX_CELLS;
+			x = (x == 0) ? MAX_CELLS - 1 : x - 1;
 			break;
 		case '+':
 			cells[x] = (cells[x] + 1) % MAX_ASCII;
@@ -174,18 +174,21 @@ int main(int argc, char **argv)
 	return 0;
 }
 
-int check_ext(const char* filename) {
-    // strrchr finds the last '.' in the string safely
-    const char* ext = strrchr(filename, '.');
-    
-    // If we found a dot, check if the string matches our allowed extensions
-    if (ext != NULL) {
-        if (strcmp(ext, ".bf") == 0 || strcmp(ext, ".b") == 0) {
-            return 0; // 0 means false/no error (Valid extension!)
-        }
-    }
-    
-    return 1; // 1 means true/error (Invalid or missing extension)
+int check_ext(const char *filename)
+{
+	// strrchr finds the last '.' in the string safely
+	const char *ext = strrchr(filename, '.');
+
+	// If we found a dot, check if the string matches our allowed extensions
+	if (ext != NULL)
+	{
+		if (strcmp(ext, ".bf") == 0 || strcmp(ext, ".b") == 0)
+		{
+			return 0; // 0 means false/no error (Valid extension!)
+		}
+	}
+
+	return 1; // 1 means true/error (Invalid or missing extension)
 }
 
 void parse_opts(char *name, int argc, char **argv, struct ProgParser *inp_parser)
