@@ -1,24 +1,30 @@
-CFLAGS = -Werror -Wall -O3
-GEN_DIR = brainfk-word-gen/main.c
-CC = g++
+CC = gcc
+CFLAGS = -Wall -Wextra -O2 -Iinclude
 
-all:
-	@echo "Compiling both main and the generator..."
-	@$(CC) main.c $(CFLAGS) -o bin/brainfk
-	@$(CC) $(GEN_DIR) $(CFLAGS) -o bin/brainfk-gen
-	@echo "Compilation is complete!"
+SRC_DIR = src
+INC_DIR = include
+OBJ_DIR = obj
+BIN_DIR = bin
 
-main:
-	@echo "Compiling brainfuck interpreter..."
-	@$(CC) main.c $(CFLAGS) -o bin/brainfk
-	@echo "Compilation is complete!"
+TARGET = $(BIN_DIR)/brainfk
 
-generator:
-	@echo "Compiling brainfuck generator..."
-	@$(CC) $(GEN_DIR) $(CFLAGS) -o bin/brainfk-gen
-	@echo "Compilation is complete!"
+SRCS = $(wildcard $(SRC_DIR)/*.c)
+OBJS = $(patsubst $(SRC_DIR)/%.c, $(OBJ_DIR)/%.o, $(SRCS))
 
-.PHONY: clean
+all: directories $(TARGET)
+
+$(TARGET): $(OBJS)
+	@echo "Linking executable $@"
+	@$(CC) $(CFLAGS) -o $@ $^
+	@echo "Build complete! Run with: ./$(TARGET)"
+
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
+	@echo "Compiling $<..."
+	@$(CC) $(CFLAGS) -c $< -o $@
+
 clean:
-	@rm bin/brainfk bin/brainfk-gen
-	@echo "Temporary files has been removed!"
+	@echo "Cleaning up..."
+	@rm -rf $(OBJ_DIR)/* $(BIN_DIR)/*
+	@echo "Clean complete!"
+
+.PHONY: all clean directories
