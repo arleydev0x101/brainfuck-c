@@ -9,7 +9,7 @@ It is a fast, lightweight, and highly optimized esoteric programming language in
 To get yourself started and try this program, use the following commands:
 
 ```bash
-git clone [https://github.com/arleydev0x101/brainfck-c](https://github.com/arleydev0x101/brainfck-c)
+git clone https://github.com/arleydev0x101/brainfck-c
 cd brainfck-c
 make
 
