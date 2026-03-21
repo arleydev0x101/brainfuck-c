@@ -65,24 +65,37 @@ int main(int argc, char** argv) {
         return 1;
     }
 
-    int i_limit = 1000;
+	int stack_loop[100];
+	int stack_i = -1;
+
+
+	size_t i_limit = 1000;
     char* input = (char*) malloc(i_limit * sizeof(char));
-    int stack_loop[100];
-    int stack_i = -1;
-
-    input[0] = 0;
-
-    for (int i = 0; input[i] != EOF; input[i++] = getc(f)){
-    	if (i == i_limit){
-  			i_limit += 1000;
-     		char* tmp = (char*) realloc(input, i_limit);
-      		if (tmp == NULL) {
-        		puts(MEM_ERROR_MSG);
-          		return 1;
-        	}
-       		input = tmp;
-     	}
+    if (input == NULL) {
+        puts(MEM_ERROR_MSG);
+        fclose(f);
+        return 1;
     }
+
+    int c;
+    size_t i = 0;
+
+    while ((c = fgetc(f)) != EOF) {
+        if (i >= i_limit - 1) {
+            i_limit += 1000;
+            char* tmp = (char*) realloc(input, i_limit);
+            if (tmp == NULL) {
+                puts(MEM_ERROR_MSG);
+                free(input);
+                fclose(f);
+                return 1;
+            }
+            input = tmp;
+        }
+        input[i++] = (char)c;
+    }
+    input[i] = '\0'; 
+    
     fclose(f);
 
     size_t x = sizeof(cells) / 2;
